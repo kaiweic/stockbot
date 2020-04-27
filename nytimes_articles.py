@@ -45,13 +45,13 @@ def parse_articles(articles):
         print(e)
     return news 
 
-def get_articles(date, query):
+def get_articles(start_date, end_date, query):
     all_articles = []
     for i in range(3):
         payload = {"q": query,
                    "fq": {'source':['Reuters','AP', 'The New York Times']},
-                   "begin_date": date,
-                   "end_date": date,
+                   "begin_date": start_date,
+                   "end_date": end_date,
                    "sort" : 'newest',
                    "news_desk" : 'business',
                    "subject" : 'business',
@@ -72,11 +72,12 @@ def get_articles(date, query):
 from datetime import date
 
 def main():
-    companies = ['AAPL']
+    companies = ['Microsoft']
     today = ''.join(str(date.today()).split('-'))
+    start_date = '20200422'
     for company in companies:
         query = company
-        company_news = get_articles(today, company)
+        company_news = get_articles(start_date, today, company)
         print(company_news)
 
 if __name__ == '__main__':
