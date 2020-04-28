@@ -1,84 +1,46 @@
 import requests
-import time
-import csv
-import json 
+from bs4 import BeautifulSoup
+import time 
+import datetime
 
-# Following this website: 
-# https://github.com/Beehamer/cs229stockprediction/blob/master/src/NYtimesScraper.py
+companies_map = {"AAPL": "apple-incorporated",
+                 "MSFT": "microsoft-corporation",
+                 "AMZN": "amazoncom-inc",}
 
-# Setting up API Key access
-with open('API_KEYS.txt') as f:
-    keys = json.load(f)
-api_key = keys['NYTimes']
-
-def parse_articles(articles):
-    news = []
-    i = 0
-    try:
-        for article in articles['response']['docs']:
-            print(i, article)
-            i += 1
-            dic = {}
-            dic['id'] = article['_id']
-            dic['headline'] = article['headline']['main'].encode('utf8')
-            dic['date'] = article['pub_date'][0:10]
-            if article['snippet'] is not None:
-                dic['snippet'] = article['snippet'].encode('utf8')
-                dic['source'] = article['source']
-                dic['type'] = article['type_of_material']
-                dic['url'] = article['web_url']
-                dic['word_count'] = article['word_count']
-
-                locations = []
-                for x in range(0, len(article['keywords'])):
-                    if 'glocations' in article['keywords'][x]['name']:
-                        locations.append(article['keywords'][x]['value'])
-                        dic['locations'] = locations
-
-                        subjects = []
-                        for x in range(0, len(article['keywords'])):
-                            if 'subject' in article['keywords'][x]['name']:
-                                subjects.append(article['keywords'][x]['value'])
-                                dic['subjects'] = subjects
-                                news.append(dic)
-    except Exception as e:
-        print(e)
-    return news 
-
-def get_articles(start_date, end_date, query):
-    all_articles = []
-    for i in range(3):
-        payload = {"q": query,
-                   "fq": {'source':['Reuters','AP', 'The New York Times']},
-                   "begin_date": start_date,
-                   "end_date": end_date,
-                   "sort" : 'newest',
-                   "news_desk" : 'business',
-                   "subject" : 'business',
-                   "glocations" : 'U.S.',
-                   "page": str(i),
-                   "api-key": api_key}
-        try:
-            articles = requests.get("https://api.nytimes.com/svc/search/v2/articlesearch.json?", params=payload)
-            articles = json.loads(articles.text)
-            articles = parse_articles(articles)
-            time.sleep(6)
-            all_articles += articles 
-        except Exception as e:
-            print(e)
-    return all_articles
-
-
-from datetime import date
+def get_articles(company_name):
+    r1 = requests.get('https://www.nytimes.com/topic/company/' + company_name) 
+    coverpage = r1.content
+    article_home = BeautifulSoup(coverpage, 'html5lib')
+    article_list = article_home.find_all('div', class_='css-1l4spti')
+    time.sleep(6)
+    articles_ret = []
+    for article in article_list:
+        children = article.findChildren('a', href=True, recursive=False)
+        child_link = children[0]['href']
+        print(child_link)
+        article_request = requests.get('https://www.nytimes.com/' + child_link)
+        article_content = BeautifulSoup(article_request.content, 'html5lib')
+        date = datetime.datetime.strptime(article_content.find_all('time')[0]['datetime'][:-5], '%Y-%m-%dT%H:%M:%S-')
+        if date.date() < datetime.date.today() - datetime.timedelta(days=7):
+            break
+        paragraph_list = article_content.find_all('p', class_='css-exrw3m evys1bk0')
+        s = []
+        for paragraph in paragraph_list:
+            s.append(paragraph.get_text())
+        articles_ret.append('\n'.join(s))
+        time.sleep(6)
+    return articles_ret
 
 def main():
-    companies = ['Microsoft']
-    today = ''.join(str(date.today()).split('-'))
-    start_date = '20200422'
-    for company in companies:
-        query = company
-        company_news = get_articles(start_date, today, company)
-        print(company_news)
+    article_map = {}
+    for company_ticker in companies_map:
+        company_name = companies_map[company_ticker]
+        print(company_name)
+        articles = get_articles(company_name)
+        article_map[company_name] = articles
+
+    for company in article_map:
+        print(company, len(article_map[company]))
 
 if __name__ == '__main__':
     main()
