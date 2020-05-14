@@ -12,6 +12,8 @@ import re
 # from rotate_proxies import get_proxies
 import random
 
+company_ticker = 'DAL'
+
 company_tags = {"AAPL": "AAPL",
                 "MSFT": "MSFT",
                 "BAC": "BankOfAmerica",
@@ -91,53 +93,64 @@ def get_tweets(company_ticker, company_tag, start_date, end_date):
 
 def main():
     global driver 
-    company_ticker = 'MSFT'
-    year = 2010
-    month_map = []
     start_date = '12-31'
-    end_date = '12-31'
+    end_date = '01-01'
+    failed_year = {}
+    start_year = 2010
+    end_year = 2015
+    for year in range(start_year, end_year):
+        print('for year {}, from {} to {}'.format(year, str(year - 1) + '-' + start_date, str(year) + '-' + end_date))
+        
+        driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
+        driver.get('https://www.twitter.com/');
+        time.sleep(2)
+
+        company_tag = company_tags[company_ticker] if company_ticker in company_tags else company_ticker
+
+        start_time = datetime.datetime.strptime(str(year - 1) + '-' + start_date, '%Y-%m-%d')
+        end_time = datetime.datetime.strptime(str(year) + '-' + end_date, '%Y-%m-%d')
+
+        dates = [start_time + datetime.timedelta(days=n) for n in range((end_time - start_time).days + 1)]
+
+        date_to_tweets = {}
+
+        failed_links = {}
+        try: 
+            for i in range(1, len(dates)):
+                start = dates[i - 1].strftime("%Y-%m-%d")
+                end = dates[i].strftime("%Y-%m-%d")
+                articles, success, link = get_tweets(company_ticker, company_tag, start, end)
+                if not success:
+                    failed_links[end] = link
+                    print('failed')
+                    print(link)
+                print('got it for {} with {} results'.format(end, len(articles)))
+                date_to_tweets[end] = articles
+                time.sleep(3.2)
+                if i % 10 == 0:
+                    driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
+                    driver.get('https://www.twitter.com/');
+                    time.sleep(2)
+        except Exception as e: 
+            print(e)
+
+        with open('./stockbots_data/{}/{}_{}.tsv'.format(company_ticker, company_ticker, year), 'w') as f:
+            for date in date_to_tweets:
+                tweets = date_to_tweets[date]
+                for tweet in tweets:
+                    f.write('{}\t{}\n'.format(date, tweet))
+
+        if failed_links:
+            failed_year[year] = failed_links
     
-    print('for year {}, from {} to {}'.format(year, str(year - 1) + '-' + start_date, str(year) + '-' + end_date))
-    company_tag = company_tags[company_ticker]
-
-    start_time = datetime.datetime.strptime(str(year - 1) + '-' + start_date, '%Y-%m-%d')
-    end_time = datetime.datetime.strptime(str(year) + '-' + end_date, '%Y-%m-%d')
-
-    dates = [start_time + datetime.timedelta(days=n) for n in range((end_time - start_time).days + 1)]
-
-    date_to_tweets = {}
-
-    failed_links = {}
-    try: 
-        for i in range(1, len(dates)):
-            start = dates[i - 1].strftime("%Y-%m-%d")
-            end = dates[i].strftime("%Y-%m-%d")
-            articles, success, link = get_tweets(company_ticker, company_tag, start, end)
-            if not success:
-                failed_links[end] = link
-                print('failed')
-                print(link)
-            print('got it for {} with {} results'.format(end, len(articles)))
-            date_to_tweets[end] = articles
-            time.sleep(3.2)
-            if i % 10 == 0:
-                driver = webdriver.Chrome("./chromedriver", chrome_options=chrome_options)
-                driver.get('https://www.twitter.com/');
-                time.sleep(2)
-    except Exception as e: 
-        print(e)
-
-    with open('./stockbots_data/{}/{}_{}.tsv'.format(company_ticker, company_ticker, year), 'w') as f:
-        for date in date_to_tweets:
-            tweets = date_to_tweets[date]
-            for tweet in tweets:
-                f.write('{}\t{}\n'.format(date, tweet))
-
-    if failed_links:
-        print('failed dates')
-        for date in failed_links:
-            link = failed_links[date]
-            print(date, link)
+    print('writing failed dates to makeup.txt')
+    with open('./makeup.txt', 'w') as f:
+        for year in failed_year:
+            print(year)
+            failed_links = failed_year[year]
+            for date in failed_links:
+                link = failed_links[date]
+                f.write(date + " " + link + "\n")
 
 if __name__ == '__main__':
     main()

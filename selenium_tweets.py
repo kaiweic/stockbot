@@ -105,7 +105,7 @@ def main():
         driver.get('https://www.twitter.com/');
         time.sleep(2)
 
-        company_tag = company_tags[company_ticker]
+        company_tag = company_tags[company_ticker] if company_ticker in company_tags else company_ticker
 
         start_time = datetime.datetime.strptime(str(year - 1) + '-' + start_date, '%Y-%m-%d')
         end_time = datetime.datetime.strptime(str(year) + '-' + end_date, '%Y-%m-%d')
