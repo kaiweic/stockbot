@@ -10,6 +10,7 @@ import datetime
 import re
 # from rotate_proxies import get_proxies
 import random
+company_ticker = 'CMG'
 
 company_tags = {"AAPL": "AAPL",
                 "MSFT": "MSFT",
@@ -92,7 +93,6 @@ def get_tweets(company_ticker, company_tag, start_date, end_date):
 
 def main():
     global driver 
-    company_ticker = 'CMG'
     start_date = '12-31'
     end_date = '12-31'
     failed_year = {}
@@ -143,14 +143,14 @@ def main():
         if failed_links:
             failed_year[year] = failed_links
 
-    print('failed dates')
+    print('writing failed dates to makeup.txt')
     with open('makeup.txt', 'w') as f:
         for year in failed_year:
             print(year)
             failed_links = failed_year[year]
             for date in failed_links:
                 link = failed_links[date]
-                f.write(date, link)
+                f.write(date + " " + link + "\n")
 
 if __name__ == '__main__':
     main()

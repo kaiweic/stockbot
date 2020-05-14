@@ -2,7 +2,7 @@ import selenium_tweets
 import datetime
 import time
 
-ticker = 'CMG'
+ticker = selenium_tweets.company_ticker
 tag = selenium_tweets.company_tags[ticker]
 
 date_to_tweets = {}
@@ -22,16 +22,14 @@ with open('makeup.txt', 'r') as f:
             print(link)
         print('got it for {} with {} results'.format(end, len(articles)))
         date_to_tweets[end] = articles
-        time.sleep(2)
-
-with open('madeup.txt', 'w') as f:
-    for date in date_to_tweets:
-        tweets = date_to_tweets[date]
-        for tweet in tweets:
-            f.write('{}\t{}\n'.format(date, tweet))
+        time.sleep(3)
 
 if failed_links:
-    print('failed dates')
-    for date in failed_links:
-        link = failed_links[date]
-        print(date, link)
+    print('writing failed dates to makeup.txt')
+    with open('makeup.txt', 'w') as f:
+        for year in failed_year:
+            print(year)
+            failed_links = failed_year[year]
+            for date in failed_links:
+                link = failed_links[date]
+                f.write(date + " " + link + "\n")
