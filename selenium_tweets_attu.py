@@ -34,10 +34,11 @@ company_tags = {"AAPL": "AAPL",
 # print(proxies)
 
 #chromedriver = "/c/Users/andre/Documents/drivers/chromedriver-81/chromedriver.exe"
+chromedriver = "./chromedriver"
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--incognito')
 chrome_options.add_argument('headless')
-driver = webdriver.Chrome("./chromedriver", chrome_options=chrome_options)
+driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
 driver.get('https://www.twitter.com/');
 
 def get_tweets(company_ticker, company_tag, start_date, end_date):
@@ -97,7 +98,7 @@ def main():
     end_date = '01-01'
     failed_year = {}
     start_year = 2010
-    end_year = 2015
+    end_year = 2020
     for year in range(start_year, end_year):
         print('for year {}, from {} to {}'.format(year, str(year - 1) + '-' + start_date, str(year) + '-' + end_date))
         
