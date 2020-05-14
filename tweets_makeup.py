@@ -8,7 +8,7 @@ tag = selenium_tweets.company_tags[ticker]
 date_to_tweets = {}
 failed_links = {}
 
-with open('makeup.txt', 'r') as f:
+with open('missing_tweets.txt', 'r') as f:
     for line in f:
         date, _ = line.split(' ', 1)
         end_date = datetime.datetime.strptime(date, '%Y-%m-%d')
@@ -24,12 +24,15 @@ with open('makeup.txt', 'r') as f:
         date_to_tweets[end] = articles
         time.sleep(3)
 
+with open('recovered_tweets.txt', 'w') as f:
+    for date in date_to_tweets:
+        tweets = date_to_tweets[date]
+        for tweet in tweets:
+            f.write('{}\t{}\n'.format(date, tweet))
+
 if failed_links:
-    print('writing failed dates to makeup.txt')
-    with open('makeup.txt', 'w') as f:
-        for year in failed_year:
-            print(year)
-            failed_links = failed_year[year]
-            for date in failed_links:
-                link = failed_links[date]
-                f.write(date + " " + link + "\n")
+    print('writing failed dates to missing_tweets.txt')
+    with open('missing_tweets.txt', 'w') as f:
+        for date in failed_links:
+            link = failed_links[date]
+            f.write(date + " " + link + "\n")

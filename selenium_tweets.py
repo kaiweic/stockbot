@@ -143,8 +143,8 @@ def main():
         if failed_links:
             failed_year[year] = failed_links
 
-    print('writing failed dates to makeup.txt')
-    with open('makeup.txt', 'w') as f:
+    print('writing failed dates to missing_tweets.txt')
+    with open('missing_tweets.txt', 'w') as f:
         for year in failed_year:
             print(year)
             failed_links = failed_year[year]
