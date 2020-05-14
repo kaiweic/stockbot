@@ -96,7 +96,9 @@ def main():
     start_date = '12-31'
     end_date = '12-31'
     failed_year = {}
-    for year in range(2012, 2020):
+    start_year = 2012
+    end_year = 2020
+    for year in range(start_year, end_year):
         print('for year {}, from {} to {}'.format(year, str(year - 1) + '-' + start_date, str(year) + '-' + end_date))
         
         driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
@@ -142,13 +144,13 @@ def main():
             failed_year[year] = failed_links
 
     print('failed dates')
-    for year in failed_year:
-        print()
-        print(year)
-        failed_links = failed_year[year]
-        for date in failed_links:
-            link = failed_links[date]
-            print(date, link)
+    with open('makeup.txt', 'w') as f:
+        for year in failed_year:
+            print(year)
+            failed_links = failed_year[year]
+            for date in failed_links:
+                link = failed_links[date]
+                f.write(date, link)
 
 if __name__ == '__main__':
     main()
