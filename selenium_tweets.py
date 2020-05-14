@@ -66,7 +66,7 @@ def get_tweets(company_ticker, company_tag, start_date, end_date):
             y_off = driver.execute_script("return window.pageYOffset;")
             y_max = driver.execute_script("return document.body.scrollHeight;")
             driver.execute_script("window.scrollTo(0, {});".format((y_off + y_max) // 2))
-            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, 'article')))
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'article')))
             time.sleep(random.uniform(1.4, 2.2))
 
             # css-901oao css-16my406 r-1qd0xha r-ad9z0x r-bcqeeo r-qvutc0
@@ -83,6 +83,8 @@ def get_tweets(company_ticker, company_tag, start_date, end_date):
                 success = True
                 break
             tweets = tweets | curr_tweets
+        if i == 9:
+            success = True
     except Exception as e:
         print(e)
     return list(tweets), success, link
@@ -90,50 +92,60 @@ def get_tweets(company_ticker, company_tag, start_date, end_date):
 
 def main():
     global driver 
-    company_ticker = 'AAPL'
-    year = 2013
-    month_map = []
+    company_ticker = 'CMG'
     start_date = '12-31'
     end_date = '12-31'
-    
-    print('for year {}, from {} to {}'.format(year, str(year - 1) + '-' + start_date, str(year) + '-' + end_date))
-    company_tag = company_tags[company_ticker]
+    failed_year = {}
+    for year in range(2012, 2020):
+        print('for year {}, from {} to {}'.format(year, str(year - 1) + '-' + start_date, str(year) + '-' + end_date))
+        
+        driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
+        driver.get('https://www.twitter.com/');
+        time.sleep(2)
 
-    start_time = datetime.datetime.strptime(str(year - 1) + '-' + start_date, '%Y-%m-%d')
-    end_time = datetime.datetime.strptime(str(year) + '-' + end_date, '%Y-%m-%d')
+        company_tag = company_tags[company_ticker]
 
-    dates = [start_time + datetime.timedelta(days=n) for n in range((end_time - start_time).days + 1)]
+        start_time = datetime.datetime.strptime(str(year - 1) + '-' + start_date, '%Y-%m-%d')
+        end_time = datetime.datetime.strptime(str(year) + '-' + end_date, '%Y-%m-%d')
 
-    date_to_tweets = {}
+        dates = [start_time + datetime.timedelta(days=n) for n in range((end_time - start_time).days + 1)]
 
-    failed_links = {}
-    try: 
-        for i in range(1, len(dates)):
-            start = dates[i - 1].strftime("%Y-%m-%d")
-            end = dates[i].strftime("%Y-%m-%d")
-            articles, success, link = get_tweets(company_ticker, company_tag, start, end)
-            if not success:
-                failed_links[end] = link
-                print('failed')
-                print(link)
-            print('got it for {} with {} results'.format(end, len(articles)))
-            date_to_tweets[end] = articles
-            time.sleep(3.2)
-            if i % 10 == 0:
-                driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
-                driver.get('https://www.twitter.com/');
-                time.sleep(2)
-    except Exception as e: 
-        print(e)
+        date_to_tweets = {}
 
-    with open('/d/stockbot_data/{}/{}_{}.tsv'.format(company_ticker, company_ticker, year), 'w') as f:
-        for date in date_to_tweets:
-            tweets = date_to_tweets[date]
-            for tweet in tweets:
-                f.write('{}\t{}\n'.format(date, tweet))
+        failed_links = {}
+        try: 
+            for i in range(1, len(dates)):
+                start = dates[i - 1].strftime("%Y-%m-%d")
+                end = dates[i].strftime("%Y-%m-%d")
+                articles, success, link = get_tweets(company_ticker, company_tag, start, end)
+                if not success:
+                    failed_links[end] = link
+                    print('failed')
+                    print(link)
+                print('got it for {} with {} results'.format(end, len(articles)))
+                date_to_tweets[end] = articles
+                time.sleep(3.2)
+                if i % 10 == 0:
+                    driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
+                    driver.get('https://www.twitter.com/');
+                    time.sleep(2)
+        except Exception as e: 
+            print(e)
 
-    if failed_links:
-        print('failed dates')
+        with open('/d/stockbot_data/{}/{}_{}.tsv'.format(company_ticker, company_ticker, year), 'w') as f:
+            for date in date_to_tweets:
+                tweets = date_to_tweets[date]
+                for tweet in tweets:
+                    f.write('{}\t{}\n'.format(date, tweet))
+
+        if failed_links:
+            failed_year[year] = failed_links
+
+    print('failed dates')
+    for year in failed_year:
+        print()
+        print(year)
+        failed_links = failed_year[year]
         for date in failed_links:
             link = failed_links[date]
             print(date, link)

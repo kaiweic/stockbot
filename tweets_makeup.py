@@ -2,7 +2,7 @@ import selenium_tweets
 import datetime
 import time
 
-ticker = 'AAPL'
+ticker = 'CMG'
 tag = selenium_tweets.company_tags[ticker]
 
 date_to_tweets = {}
@@ -22,7 +22,7 @@ with open('makeup.txt', 'r') as f:
             print(link)
         print('got it for {} with {} results'.format(end, len(articles)))
         date_to_tweets[end] = articles
-        time.sleep(1.1)
+        time.sleep(2)
 
 with open('madeup.txt', 'w') as f:
     for date in date_to_tweets:
