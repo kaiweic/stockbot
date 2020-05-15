@@ -12,7 +12,7 @@ import re
 import random
 import os
 
-company_ticker = 'Amazon'
+company_ticker = 'GOOGL'
 
 DATA_DIR = '/d/stockbot_data/{}/'
 
@@ -24,7 +24,7 @@ company_tags = {"AAPL": "AAPL",
                 "CMG": "Chipotle",
                 "DAL": "Delta",
                 "FB": "facebook",
-                "GOOGL": "GOOGL",
+                "GOOGL": "google",
                 "JPM": "jpmorgan",
                 "KO": "CocaCola",
                 "LUV": "SouthwestAirlines",
@@ -40,7 +40,7 @@ chrome_options.add_argument('--incognito')
 chrome_options.add_argument('headless')
 driver = None
 
-def get_tweets(start_date, end_date, company_tag=company_ticker):
+def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
     tweets = set()
     success = False
     link = None
@@ -69,7 +69,10 @@ def get_tweets(start_date, end_date, company_tag=company_ticker):
             # articles = tweet_page.find_all('article')
             # for article in articles:
             #     text = article.find_all('div', class_="css-901oao r-jwli3a r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0")
-            tweet_page = BeautifulSoup(html, 'html5lib')
+            if alt:
+                tweet_page = BeautifulSoup(html, 'html.parser')
+            else:
+                tweet_page = BeautifulSoup(html, 'html5lib')
             # articles = tweet_page.find_all('div', class_="css-901oao r-jwli3a r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0")
             articles = tweet_page.find_all('div', class_="css-901oao r-hkyrab r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0")
             curr_tweets = set([re.sub(' +', ' ', article.get_text().replace('\n', ' ')) for article in articles])
@@ -91,17 +94,18 @@ def restart_driver():
     driver.get('https://www.twitter.com/')
     time.sleep(2)
 
-def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker):
+def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt=False):
     
     assert(start_year <= end_year)
 
     global driver 
     restart_driver()
-    start_date = '12-31' # TODO CHANGE TO 01-01
+    start_date = '12-30' # TODO CHANGE TO 01-01
     end_date = '01-01'   
     failed_year = {}
 
     path = DATA_DIR.format(company_ticker)
+    print("Creating {}.format(path)")
     if not os.path.exists(path):
         os.makedirs(path)
 
@@ -124,7 +128,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker):
             for i in range(1, len(dates)):
                 start = dates[i - 1].strftime("%Y-%m-%d")
                 end = dates[i].strftime("%Y-%m-%d")
-                articles, success, link = get_tweets(start, end, company_tag=company_tag)
+                articles, success, link = get_tweets(start, end, company_tag=company_tag, alt)
                 if not success:
                     failed_links[start] = link
                     print('failed')
@@ -166,5 +170,5 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker):
 
 
 if __name__ == '__main__':
-    get_years(start_year=2010, end_year=2013) # TODO Change to 2010 to 2019
+    get_years(start_year=2010, end_year=2019) # TODO Change to 2010 to 2019
     # driver.close()

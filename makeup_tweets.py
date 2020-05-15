@@ -8,7 +8,7 @@ failed_links = {}
 company_ticker = selenium_tweets.company_ticker
 company_tag = selenium_tweets.company_tags[company_ticker] if company_ticker in selenium_tweets.company_tags else company_ticker
 
-def main():
+def main(alt=False):
     selenium_tweets.restart_driver()
 
     with open('missing_tweets.txt', 'r') as f:
@@ -21,7 +21,7 @@ def main():
             end_date = start_date + datetime.timedelta(days=1)
             start = start_date.strftime("%Y-%m-%d")
             end = end_date.strftime("%Y-%m-%d")
-            articles, success, link = selenium_tweets.get_tweets(start, end, company_tag)
+            articles, success, link = selenium_tweets.get_tweets(start, end, company_tag, alt)
             if not success:
                 failed_links[end] = link
                 print('failed')

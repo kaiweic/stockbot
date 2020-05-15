@@ -21,7 +21,7 @@ def get_tweets(start, end):
     selenium_tweets.get_tweets(start, end, company_tag)
 
 def main():
-    selenium_tweets.get_years(start_year=2010, end_year=2013, company_ticker=company_ticker) # TODO Change end_year to 2019
+    selenium_tweets.get_years(start_year=2010, end_year=2013, company_ticker=company_ticker, alt=True) # TODO Change end_year to 2019
 
 if __name__ == '__main__':
     main()
