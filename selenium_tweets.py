@@ -10,7 +10,15 @@ import datetime
 import re
 # from rotate_proxies import get_proxies
 import random
-company_ticker = 'CMG'
+import os
+
+# TODO: Add refreshing driver as a function, so it can be called in tweets_makeup.py
+
+company_ticker = 'AAPL'
+
+DATA_DIR = '/d/stockbot_data/{}/'
+
+DATA_PATH = DATA_DIR + '{}_{}.tsv'
 
 company_tags = {"AAPL": "AAPL",
                 "MSFT": "MSFT",
@@ -35,10 +43,11 @@ chromedriver = "/c/Users/andre/Documents/drivers/chromedriver-81/chromedriver.ex
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--incognito')
 chrome_options.add_argument('headless')
-driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
-driver.get('https://www.twitter.com/');
+# driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
+# driver.get('https://www.twitter.com/');
+driver = None
 
-def get_tweets(company_ticker, company_tag, start_date, end_date):
+def get_tweets(start_date, end_date, company_tag=company_ticker):
     tweets = set()
     # proxy = random.sample((proxies), 1)[0]
     # print('using proxy {}'.format(proxy))
@@ -90,51 +99,65 @@ def get_tweets(company_ticker, company_tag, start_date, end_date):
         print(e)
     return list(tweets), success, link
 
+def restart_driver():
+    global driver
+    driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
+    driver.get('https://www.twitter.com/')
+    time.sleep(2)
 
-def main():
+def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker):
+    
+    assert(start_year <= end_year)
+
     global driver 
+    restart_driver()
     start_date = '12-31'
-    end_date = '12-31'
+    end_date = '01-01'
     failed_year = {}
-    start_year = 2012
-    end_year = 2020
-    for year in range(start_year, end_year):
-        print('for year {}, from {} to {}'.format(year, str(year - 1) + '-' + start_date, str(year) + '-' + end_date))
-        
-        driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
-        driver.get('https://www.twitter.com/');
-        time.sleep(2)
 
-        company_tag = company_tags[company_ticker] if company_ticker in company_tags else company_ticker
+    path = DATA_DIR.format(company_ticker)
+    if not os.path.exists(path):
+        os.makedirs(path)
 
-        start_time = datetime.datetime.strptime(str(year - 1) + '-' + start_date, '%Y-%m-%d')
-        end_time = datetime.datetime.strptime(str(year) + '-' + end_date, '%Y-%m-%d')
+    company_tag = company_tags[company_ticker] if company_ticker in company_tags else company_ticker
+    print("Searching up #{} for {} from {} to {} (inclusive)".format(company_tag, company_ticker, start_year, end_year))
 
-        dates = [start_time + datetime.timedelta(days=n) for n in range((end_time - start_time).days + 1)]
+    for year in range(start_year, end_year + 1):
+        print('for year {}, from {} to {}'.format(year, str(year) + '-' + start_date, str(year + 1) + '-' + end_date))
+
+
+        start_time = datetime.datetime.strptime(str(year) + '-' + start_date, '%Y-%m-%d')
+        end_time = datetime.datetime.strptime(str(year + 1) + '-' + end_date, '%Y-%m-%d')
+
+        dates = [start_time + datetime.timedelta(days=n) for n in range((end_time - start_time).days + 1)] # Accounts for leap years
 
         date_to_tweets = {}
-
         failed_links = {}
+
         try: 
             for i in range(1, len(dates)):
                 start = dates[i - 1].strftime("%Y-%m-%d")
                 end = dates[i].strftime("%Y-%m-%d")
-                articles, success, link = get_tweets(company_ticker, company_tag, start, end)
+                articles, success, link = get_tweets(start, end, company_tag=company_tag)
                 if not success:
-                    failed_links[end] = link
+                    failed_links[start] = link
                     print('failed')
                     print(link)
-                print('got it for {} with {} results'.format(end, len(articles)))
-                date_to_tweets[end] = articles
-                time.sleep(3.2)
+                print('got it for {} with {} results'.format(start, len(articles)))
+                date_to_tweets[start] = articles
+                time.sleep(3.5)
                 if i % 10 == 0:
-                    driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
-                    driver.get('https://www.twitter.com/');
-                    time.sleep(2)
+                    # TODO: Maybe unnecessary to restart driver?
+                    restart_driver()
+
+            if (year != end_year):
+                restart_driver()
         except Exception as e: 
             print(e)
 
-        with open('/d/stockbot_data/{}/{}_{}.tsv'.format(company_ticker, company_ticker, year), 'w') as f:
+        year_path = DATA_PATH.format(company_ticker, company_ticker, str(year) + "makeup")
+        print('writing year to {}'.format(year_path))
+        with open(year_path, 'w') as f:
             for date in date_to_tweets:
                 tweets = date_to_tweets[date]
                 for tweet in tweets:
@@ -144,7 +167,7 @@ def main():
             failed_year[year] = failed_links
 
     print('writing failed dates to missing_tweets.txt')
-    with open('missing_tweets.txt', 'w') as f:
+    with open('./missing_tweets.txt', 'w') as f:
         for year in failed_year:
             print(year)
             failed_links = failed_year[year]
@@ -153,5 +176,5 @@ def main():
                 f.write(date + " " + link + "\n")
 
 if __name__ == '__main__':
-    main()
+    get_years(start_year=2019, end_year=2019)
     driver.close()
