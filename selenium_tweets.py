@@ -100,7 +100,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
 
     global driver 
     restart_driver()
-    start_date = '12-30' # TODO CHANGE TO 01-01
+    start_date = '01-01' # TODO CHANGE TO 01-01
     end_date = '01-01'   
     failed_year = {}
 
@@ -128,7 +128,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
             for i in range(1, len(dates)):
                 start = dates[i - 1].strftime("%Y-%m-%d")
                 end = dates[i].strftime("%Y-%m-%d")
-                articles, success, link = get_tweets(start, end, company_tag=company_tag, alt)
+                articles, success, link = get_tweets(start, end, company_tag=company_tag, alt=True)
                 if not success:
                     failed_links[start] = link
                     print('failed')
