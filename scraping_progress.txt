@@ -1,0 +1,21 @@
+Andrew 
+- AAPL: ✅
+- CMG: ✅
+- GOOGL: ❌
+- LUV: ❌
+- UAL: ❌
+
+Eric
+- MSFT: ❌
+- DAL: ❌
+- JPM: ❌
+- MCD: ❌
+- V: ❌
+
+Kevin
+- BAC: ❌
+- FB: ❌
+- KO: ❌
+- PEP: ❌
+- WFC: ❌
+
