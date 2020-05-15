@@ -1,9 +1,11 @@
 import selenium_tweets_attu as selenium_tweets
-import tweets_makeup
+import makeup_tweets
 import datetime
 import time
 
-tweets_makeup.company_ticker = selenium_tweets.company_ticker
-tweets_makeup.company_tag = selenium_tweets.company_tags[company_ticker] if company_ticker in selenium_tweets.company_tags else company_ticker
+company_ticker = selenium_tweets.company_ticker
 
-tweets_makeup.main()
+makeup_tweets.company_ticker = company_ticker
+makeup_tweets.company_tag = selenium_tweets.company_tags[company_ticker] if company_ticker in selenium_tweets.company_tags else company_ticker
+
+makeup_tweets.main()

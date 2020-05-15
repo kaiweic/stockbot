@@ -12,9 +12,7 @@ import re
 import random
 import os
 
-# TODO: Add refreshing driver as a function, so it can be called in tweets_makeup.py
-
-company_ticker = 'AAPL'
+company_ticker = 'Amazon'
 
 DATA_DIR = '/d/stockbot_data/{}/'
 
@@ -36,27 +34,14 @@ company_tags = {"AAPL": "AAPL",
                 "V": "visa",
                 "WFC": "wellsfargo",}
 
-# proxies = get_proxies()
-# print(proxies)
-
 chromedriver = "/c/Users/andre/Documents/drivers/chromedriver-81/chromedriver.exe"
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--incognito')
 chrome_options.add_argument('headless')
-# driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
-# driver.get('https://www.twitter.com/');
 driver = None
 
 def get_tweets(start_date, end_date, company_tag=company_ticker):
     tweets = set()
-    # proxy = random.sample((proxies), 1)[0]
-    # print('using proxy {}'.format(proxy))
-
-    # chrome_options = webdriver.ChromeOptions()
-    # chrome_options.add_argument('--incognito')
-    # chrome_options.add_argument('headless')
-    # # chrome_options.add_argument('--proxy-server={}'.format(proxy))
-    # driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
     success = False
     link = None
 
@@ -99,6 +84,7 @@ def get_tweets(start_date, end_date, company_tag=company_ticker):
         print(e)
     return list(tweets), success, link
 
+# Add refreshing driver as a function, so it can be called in tweets_makeup.py
 def restart_driver():
     global driver
     driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
@@ -111,8 +97,8 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker):
 
     global driver 
     restart_driver()
-    start_date = '12-31'
-    end_date = '01-01'
+    start_date = '12-31' # TODO CHANGE TO 01-01
+    end_date = '01-01'   
     failed_year = {}
 
     path = DATA_DIR.format(company_ticker)
@@ -155,8 +141,8 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker):
         except Exception as e: 
             print(e)
 
-        year_path = DATA_PATH.format(company_ticker, company_ticker, str(year) + "makeup")
-        print('writing year to {}'.format(year_path))
+        year_path = DATA_PATH.format(company_ticker, company_ticker, str(year))
+        print('writing year to {}\n'.format(year_path))
         with open(year_path, 'w') as f:
             for date in date_to_tweets:
                 tweets = date_to_tweets[date]
@@ -166,15 +152,19 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker):
         if failed_links:
             failed_year[year] = failed_links
 
-    print('writing failed dates to missing_tweets.txt')
-    with open('./missing_tweets.txt', 'w') as f:
-        for year in failed_year:
-            print(year)
-            failed_links = failed_year[year]
-            for date in failed_links:
-                link = failed_links[date]
-                f.write(date + " " + link + "\n")
+    if failed_year:
+        print('writing failed dates to missing_tweets.txt')
+        with open('./missing_tweets.txt', 'w') as f:
+            for year in failed_year:
+                failed_links = failed_year[year]
+                for date in failed_links:
+                    link = failed_links[date]
+                    f.write(date + " " + str(link) + "\n")
+    else:
+        print("There were no failed dates")
+    driver.close()
+
 
 if __name__ == '__main__':
-    get_years(start_year=2019, end_year=2019)
-    driver.close()
+    get_years(start_year=2010, end_year=2013) # TODO Change to 2010 to 2019
+    # driver.close()
