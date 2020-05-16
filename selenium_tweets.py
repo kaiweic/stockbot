@@ -105,7 +105,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
     failed_year = {}
 
     path = DATA_DIR.format(company_ticker)
-    print("Creating {}.format(path)")
+    print("Creating {} if not already created".format(path))
     if not os.path.exists(path):
         os.makedirs(path)
 
