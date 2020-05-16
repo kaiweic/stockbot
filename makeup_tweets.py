@@ -43,16 +43,14 @@ def main(alt=False):
         if not date_to_tweets:
             f.write('')
 
-    if failed_links:
-        print('writing failed dates to missing_tweets.txt')
-        with open('missing_tweets.txt', 'w') as f:
-            for date in failed_links:
-                link = failed_links[date]
-                f.write(date + " " + str(link) + "\n")
-            if not failed_links:
-                f.write('')
-    else:
-        print("there were no failed dates")
+    print('writing failed dates to missing_tweets.txt')
+    with open('missing_tweets.txt', 'w') as f:
+        for date in failed_links:
+            link = failed_links[date]
+            f.write(date + " " + str(link) + "\n")
+        if not failed_links:
+            print("there were no failed dates")
+            f.write('')
 
 if __name__ == '__main__':
     main()
