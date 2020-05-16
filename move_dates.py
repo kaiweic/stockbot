@@ -2,7 +2,10 @@ import os
 import datetime
 import configparser
 
-config = configparser.ConfigParser().read('settings.config')['DEFAULT']
+config = configparser.ConfigParser()
+config.read('settings.config')
+config = config['DEFAULT']
+
 company_ticker = config['company_ticker']
 
 PATH = './twitter_data/{}.tsv'.format(company_ticker)

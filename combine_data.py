@@ -2,7 +2,10 @@ from os import listdir
 from os.path import isfile, join
 import configparser
 
-config = configparser.ConfigParser().read('settings.config')['DEFAULT']
+config = configparser.ConfigParser()
+config.read('settings.config')
+config = config['DEFAULT']
+
 company_ticker = config['company_ticker']
 
 PATH = config['DATA_DIR'].format(company_ticker)

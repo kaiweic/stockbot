@@ -13,6 +13,8 @@ company_tag = selenium_tweets.company_tags[company_ticker] if company_ticker in 
 alt = selenium_tweets.alt
 
 def main(alt=False):
+    count = 0
+
     selenium_tweets.restart_driver()
 
     with open('missing_tweets.txt', 'r') as f:
@@ -20,6 +22,7 @@ def main(alt=False):
             if len(line) == 1:
                 print('There are probably no missing tweets, check with check_consecutive_tweets.py')
                 continue
+            count += 1
             date, _ = line.split(' ', 1)
             start_date = datetime.datetime.strptime(date, '%Y-%m-%d')
             end_date = start_date + datetime.timedelta(days=1)
@@ -33,6 +36,10 @@ def main(alt=False):
             print('got it for {} with {} results'.format(end, len(articles)))
             date_to_tweets[end] = articles
             time.sleep(3.5)
+
+    if count == 0:
+        print("There weren't any missing tweets, move on")
+        return False
 
     prev_date = None
     with open('recovered_tweets.txt', 'w') as f:
@@ -56,6 +63,9 @@ def main(alt=False):
             print("there were no failed dates")
             f.write('')
 
+    return True
+
 if __name__ == '__main__':
-    main(alt=alt)
-    rewrite_tweets.main()
+    success = main(alt=alt)
+    if success:
+        rewrite_tweets.main()
