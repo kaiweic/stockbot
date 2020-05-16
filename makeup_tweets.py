@@ -2,6 +2,8 @@ import selenium_tweets
 import datetime
 import time
 
+import rewrite_tweets
+
 date_to_tweets = {}
 failed_links = {}
 
@@ -56,3 +58,4 @@ def main(alt=False):
 
 if __name__ == '__main__':
     main(alt=alt)
+    rewrite_tweets.main()

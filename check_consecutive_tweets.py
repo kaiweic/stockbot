@@ -2,7 +2,7 @@ import datetime
 import selenium_tweets
 # import selenium_tweets_attu as selenium_tweets # For eric
 
-company_ticker = 'AAPL'
+company_ticker = selenium_tweets.company_ticker
 
 PATH = selenium_tweets.DATA_PATH
 

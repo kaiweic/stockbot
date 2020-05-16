@@ -14,8 +14,7 @@ import os
 
 import configparser
 
-config = configparser.ConfigParser()
-config = config.read('settings.config')['DEFAULT']
+config = configparser.ConfigParser().read('settings.config')['DEFAULT']
 
 chromedriver = config['chromedriver']
 company_ticker = config['company_ticker']
