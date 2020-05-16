@@ -10,11 +10,11 @@ import datetime
 import re
 # from rotate_proxies import get_proxies
 import random
-import os
+import os, io
 
-company_ticker = 'GOOGL'
+company_ticker = 'BAC'
 
-DATA_DIR = '/d/stockbot_data/{}/'
+DATA_DIR = '.\\twitter_data\\{}\\'
 
 DATA_PATH = DATA_DIR + '{}_{}.tsv'
 
@@ -34,7 +34,7 @@ company_tags = {"AAPL": "AAPL",
                 "V": "visa",
                 "WFC": "wellsfargo",}
 
-chromedriver = "/c/Users/andre/Documents/drivers/chromedriver-81/chromedriver.exe"
+chromedriver = "C:\\Users\\kevin\\Downloads\\chromedriver.exe"
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--incognito')
 chrome_options.add_argument('headless')
@@ -147,7 +147,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
 
         year_path = DATA_PATH.format(company_ticker, company_ticker, str(year))
         print('writing year to {}\n'.format(year_path))
-        with open(year_path, 'w') as f:
+        with io.open(year_path, 'w', encoding='utf-8') as f:
             for date in date_to_tweets:
                 tweets = date_to_tweets[date]
                 for tweet in tweets:
@@ -158,7 +158,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
 
     if failed_year:
         print('writing failed dates to missing_tweets.txt')
-        with open('./missing_tweets.txt', 'w') as f:
+        with io.open('./missing_tweets.txt', 'w', encoding='utf-8') as f:
             for year in failed_year:
                 failed_links = failed_year[year]
                 for date in failed_links:
