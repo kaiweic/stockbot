@@ -33,4 +33,4 @@ print("check the following dates")
 print(missing_dates)
 for date in missing_dates:
     tomorrow = (datetime.datetime.strptime(date, '%Y-%m-%d') + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-    print('https://twitter.com/search?q=(%23{})%20until%3A{}%20since%3A{}&src=typed_query'.format(company_tag, tomorrow, date))
+    print('{} https://twitter.com/search?q=(%23{})%20until%3A{}%20since%3A{}&src=typed_query'.format(date, company_tag, tomorrow, date))

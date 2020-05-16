@@ -12,11 +12,16 @@ import re
 import random
 import os
 
-company_ticker = 'GOOGL'
+import configparser
 
-DATA_DIR = '/d/stockbot_data/{}/'
+config = configparser.ConfigParser()
+config = config.read('settings.config')['DEFAULT']
 
-DATA_PATH = DATA_DIR + '{}_{}.tsv'
+chromedriver = config['chromedriver']
+company_ticker = config['company_ticker']
+DATA_DIR = config['DATA_DIR']
+DATA_PATH = DATA_DIR + '{}_{}.tsv' # Should look like /d/stockbot_data/{}/{}_{}.tsv
+alt = config.getboolean('alt') # Should be true for eric since he's on linux
 
 company_tags = {"AAPL": "AAPL",
                 "MSFT": "MSFT",
@@ -34,7 +39,6 @@ company_tags = {"AAPL": "AAPL",
                 "V": "visa",
                 "WFC": "wellsfargo",}
 
-chromedriver = "/c/Users/andre/Documents/drivers/chromedriver-81/chromedriver.exe"
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--incognito')
 chrome_options.add_argument('headless')
@@ -170,5 +174,5 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
 
 
 if __name__ == '__main__':
-    get_years(start_year=2010, end_year=2019) # TODO Change to 2010 to 2019
+    get_years(start_year=2010, end_year=2019, alt=alt) # TODO Change to 2010 to 2019
     # driver.close()
