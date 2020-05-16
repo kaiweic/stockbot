@@ -21,7 +21,7 @@ chromedriver = config['chromedriver']
 company_ticker = config['company_ticker']
 DATA_DIR = config['DATA_DIR']
 DATA_PATH = DATA_DIR + '{}_{}.tsv' # Should look like /d/stockbot_data/{}/{}_{}.tsv
-alt = config.getboolean('alt') # Should be true for eric since he's on linux
+alt = config.getboolean('alt')     # Should be true for eric since he's on linux
 
 company_tags = {"AAPL": "AAPL",
                 "MSFT": "MSFT",

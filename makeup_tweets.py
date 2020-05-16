@@ -8,6 +8,8 @@ failed_links = {}
 company_ticker = selenium_tweets.company_ticker
 company_tag = selenium_tweets.company_tags[company_ticker] if company_ticker in selenium_tweets.company_tags else company_ticker
 
+alt = selenium_tweets.alt
+
 def main(alt=False):
     selenium_tweets.restart_driver()
 
@@ -53,4 +55,4 @@ def main(alt=False):
             f.write('')
 
 if __name__ == '__main__':
-    main()
+    main(alt=alt)
