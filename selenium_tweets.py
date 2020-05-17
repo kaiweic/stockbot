@@ -95,15 +95,17 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
 # Add refreshing driver as a function, so it can be called in tweets_makeup.py
 def restart_driver():
     global driver
+    try:
+        driver.close()
+    except Exception as e:
+        print(e)
     driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
     driver.get('https://www.twitter.com/')
     time.sleep(2)
 
 def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt=False):
-    
     assert(start_year <= end_year)
 
-    global driver 
     restart_driver()
     start_date = '01-01' # TODO CHANGE TO 01-01
     end_date = '01-01'   
