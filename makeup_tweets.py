@@ -33,12 +33,16 @@ def main(alt=False):
 
             if not success:
                 failed_links[start] = link
+                selenium_tweets.restart_driver()
                 print('failed')
                 print(link)
             print('got it for {} with {} results'.format(start, len(articles)))
             date_to_tweets[start] = articles
             time.sleep(3.5)
 
+            if (count + 1) % 40 == 0:
+                selenium_tweets.restart_driver()
+                
     if selenium_tweets.driver:
         selenium_tweets.driver.quit()
 

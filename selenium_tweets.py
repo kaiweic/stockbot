@@ -191,5 +191,5 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
 
 
 if __name__ == '__main__':
-    get_years(start_year=2010, end_year=2019, alt=alt) # TODO Change to 2010 to 2019
+    get_years(start_year=2015, end_year=2019, alt=alt) # TODO Change to 2010 to 2019
     # driver.close()
