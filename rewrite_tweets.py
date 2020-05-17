@@ -65,12 +65,13 @@ def main():
                         # print(3)
                         print("looking for {}, but is matching with {}".format(date, line[0:10]))
                         missing_dates.add(date)
-        print(missing_dates)
         # return
         with io.open(curr_path, 'w', encoding='utf-8') as writefile:
             with io.open(temp_path, 'r', encoding='utf-8') as readfile:
                 for line in readfile:
                     writefile.write(line)
+
+    print(missing_dates)
 
     print('cleaning up {}'.format(temp_path))
     os.remove(temp_path)

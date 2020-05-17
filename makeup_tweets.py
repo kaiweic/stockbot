@@ -30,6 +30,7 @@ def main(alt=False):
             start = start_date.strftime("%Y-%m-%d")
             end = end_date.strftime("%Y-%m-%d")
             articles, success, link = selenium_tweets.get_tweets(start, end, company_tag, alt)
+
             if not success:
                 failed_links[start] = link
                 print('failed')
@@ -37,6 +38,9 @@ def main(alt=False):
             print('got it for {} with {} results'.format(start, len(articles)))
             date_to_tweets[start] = articles
             time.sleep(3.5)
+
+    if selenium_tweets.driver:
+        selenium_tweets.driver.quit()
 
     if count == 0:
         print("There weren't any missing tweets, move on")
@@ -65,4 +69,5 @@ def main(alt=False):
 if __name__ == '__main__':
     success = main(alt=alt)
     if success:
+        print('rewriting tweets')
         rewrite_tweets.main()

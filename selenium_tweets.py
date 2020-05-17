@@ -108,6 +108,7 @@ def restart_driver():
     time.sleep(2)
 
 def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt=False):
+    global driver
     assert(start_year <= end_year)
 
     restart_driver()
@@ -147,12 +148,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
                 print('got it for {} with {} results'.format(start, len(articles)))
                 date_to_tweets[start] = articles
                 time.sleep(3.5)
-                if i % 10 == 0:
-                    # TODO: Maybe unnecessary to restart driver?
-                    restart_driver()
 
-            if (year != end_year):
-                restart_driver()
         except Exception as e: 
             print(e)
 
