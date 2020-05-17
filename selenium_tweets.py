@@ -3,6 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 # from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import time
@@ -53,7 +54,7 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
 
     try:
         # r-30o5oe r-1niwhzg r-17gur6a r-1yadl64 r-deolkf r-homxoj r-poiln3 r-7cikom r-1ny4l3l r-1sp51qo r-1swcuj1 r-1dz5y72 r-1ttztb7 r-13qz1uu
-        search_box = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'r-30o5oe')))
+        search_box = WebDriverWait(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, 'r-30o5oe')))
         time.sleep(random.uniform(1.5, 2.4))
 
         search_box.clear()
@@ -63,11 +64,13 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
         search_box.send_keys('(#{}) until:{} since:{}'.format(company_tag, end_date, start_date))
         search_box.submit()
         link = driver.current_url
+
         for i in range(10):
             y_off = driver.execute_script("return window.pageYOffset;")
             y_max = driver.execute_script("return document.body.scrollHeight;")
             driver.execute_script("window.scrollTo(0, {});".format((y_off + y_max) // 2))
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'article')))
+
+            WebDriverWait(driver, 8).until(EC.presence_of_element_located((By.TAG_NAME, 'article')))
             time.sleep(random.uniform(1.4, 2.2))
 
             # css-901oao css-16my406 r-1qd0xha r-ad9z0x r-bcqeeo r-qvutc0
@@ -75,10 +78,12 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
             # articles = tweet_page.find_all('article')
             # for article in articles:
             #     text = article.find_all('div', class_="css-901oao r-jwli3a r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0")
+
             if alt:
                 tweet_page = BeautifulSoup(html, 'html.parser')
             else:
                 tweet_page = BeautifulSoup(html, 'html5lib')
+
             # articles = tweet_page.find_all('div', class_="css-901oao r-jwli3a r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0")
             articles = tweet_page.find_all('div', class_="css-901oao r-hkyrab r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0")
             curr_tweets = set([re.sub(' +', ' ', article.get_text().replace('\n', ' ')) for article in articles])
@@ -89,6 +94,10 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
             tweets = tweets | curr_tweets
         if i == 9:
             success = True
+    except TimeoutException:
+        print('Timing out, try again later')
+    except NoSuchElementException:
+        print("Can't find the element, try again later or maybe there aren't any tweets")
     except Exception as e:
         print(e)
         restart_driver()
@@ -141,10 +150,12 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
                 start = dates[i - 1].strftime("%Y-%m-%d")
                 end = dates[i].strftime("%Y-%m-%d")
                 articles, success, link = get_tweets(start, end, company_tag=company_tag, alt=True)
+
                 if not success:
                     failed_links[start] = link
                     print('failed')
                     print(link)
+
                 print('got it for {} with {} results'.format(start, len(articles)))
                 date_to_tweets[start] = articles
                 time.sleep(3.5)
