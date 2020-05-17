@@ -11,6 +11,7 @@ import re
 # from rotate_proxies import get_proxies
 import random
 import os
+import io
 
 import configparser
 
@@ -90,13 +91,15 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
             success = True
     except Exception as e:
         print(e)
+        restart_driver()
     return list(tweets), success, link
 
 # Add refreshing driver as a function, so it can be called in tweets_makeup.py
 def restart_driver():
     global driver
     try:
-        driver.close()
+        if driver is not None:
+            driver.quit()
     except Exception as e:
         print(e)
     driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
@@ -154,7 +157,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
 
         year_path = DATA_PATH.format(company_ticker, company_ticker, str(year))
         print('writing year to {}\n'.format(year_path))
-        with open(year_path, 'w') as f:
+        with io.open(year_path, 'w', encoding='utf-8') as f:
             for date in date_to_tweets:
                 tweets = date_to_tweets[date]
                 for tweet in tweets:
@@ -165,7 +168,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
 
     if failed_year:
         print('writing failed dates to missing_tweets.txt')
-        with open('./missing_tweets.txt', 'w') as f:
+        with io.open('./missing_tweets.txt', 'w', , encoding='utf-8') as f:
             for year in failed_year:
                 failed_links = failed_year[year]
                 for date in failed_links:
@@ -173,7 +176,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
                     f.write(date + " " + str(link) + "\n")
     else:
         print("There were no failed dates")
-    driver.close()
+    driver.quit()
 
 
 if __name__ == '__main__':

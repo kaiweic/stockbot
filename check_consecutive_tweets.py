@@ -1,6 +1,7 @@
 import datetime
 import selenium_tweets
 import os
+import io
 
 company_ticker = selenium_tweets.company_ticker
 
@@ -21,8 +22,8 @@ for year in range(start_year, end_year + 1):
     if not os.path.exists(curr_path):
         print("Data for {} doesn't exist, maybe check that later".format(year))
         continue
-        
-    with open(curr_path, 'r') as f:
+
+    with io.open(curr_path, 'r', encoding='utf-8') as f:
         for line in f:
             try:
                 date, _ = line.split('\t', 1)
