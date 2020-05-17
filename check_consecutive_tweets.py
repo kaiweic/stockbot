@@ -23,13 +23,15 @@ for year in range(start_year, end_year + 1):
         print("Data for {} doesn't exist, maybe check that later".format(year))
         continue
 
+    date = None
     with io.open(curr_path, 'r', encoding='utf-8') as f:
         for line in f:
             try:
                 date, _ = line.split('\t', 1)
             except Exception as e:
                 print(e)
-                print(date)
+                if date:
+                    print(date)
                 print(line)
             if date in curr_days: curr_days.remove(date)
     all_days |= curr_days

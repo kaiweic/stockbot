@@ -31,27 +31,23 @@ def main(alt=False):
             end = end_date.strftime("%Y-%m-%d")
             articles, success, link = selenium_tweets.get_tweets(start, end, company_tag, alt)
             if not success:
-                failed_links[end] = link
+                failed_links[start] = link
                 print('failed')
                 print(link)
-            print('got it for {} with {} results'.format(end, len(articles)))
-            date_to_tweets[end] = articles
+            print('got it for {} with {} results'.format(start, len(articles)))
+            date_to_tweets[start] = articles
             time.sleep(3.5)
 
     if count == 0:
         print("There weren't any missing tweets, move on")
         return False
 
-    prev_date = None
     with io.open('recovered_tweets.txt', 'w', encoding='utf-8') as f:
         for date in date_to_tweets:
             tweets = date_to_tweets[date]
             curr_date = datetime.datetime.strptime(date, '%Y-%m-%d')
-            # if (prev_date != None and ((prev_date != curr_date - datetime.timedelta(days=1)) or (prev_date.year != curr_date.year))):
-            #     f.write('\n')
             for tweet in tweets:
                 f.write('{}\t{}\n'.format(date, tweet))
-            prev_date = curr_date
         if not date_to_tweets:
             f.write('')
 

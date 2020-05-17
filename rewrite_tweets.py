@@ -49,18 +49,24 @@ def main():
                 line = readfile.readline()
 
                 for date in dates:
+                    # print(date, line.strip(), end=' ')
                     if line.startswith(date):
+                        # print(1)
                         while (line.startswith(date)):
                             writefile.write(line)
                             line = readfile.readline()
 
                     elif date in missed_tweets:
+                        # print(2)
                         for missed_tweet in missed_tweets[date]:
                             writefile.write(missed_tweet)
 
                     else:
+                        # print(3)
+                        print("looking for {}, but is matching with {}".format(date, line[0:10]))
                         missing_dates.add(date)
-
+        print(missing_dates)
+        # return
         with io.open(curr_path, 'w', encoding='utf-8') as writefile:
             with io.open(temp_path, 'r', encoding='utf-8') as readfile:
                 for line in readfile:
