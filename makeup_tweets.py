@@ -1,6 +1,7 @@
 import selenium_tweets 
 import datetime
 import time
+import io
 
 import rewrite_tweets
 
@@ -17,7 +18,7 @@ def main(alt=False):
 
     selenium_tweets.restart_driver()
 
-    with open('missing_tweets.txt', 'r') as f:
+    with io.open('missing_tweets.txt', 'r', encoding='utf-8') as f:
         for line in f:
             if len(line) == 1:
                 print('There are probably no missing tweets, check with check_consecutive_tweets.py')
@@ -42,7 +43,7 @@ def main(alt=False):
         return False
 
     prev_date = None
-    with open('recovered_tweets.txt', 'w') as f:
+    with io.open('recovered_tweets.txt', 'w', encoding='utf-8') as f:
         for date in date_to_tweets:
             tweets = date_to_tweets[date]
             curr_date = datetime.datetime.strptime(date, '%Y-%m-%d')
@@ -55,7 +56,7 @@ def main(alt=False):
             f.write('')
 
     print('writing failed dates to missing_tweets.txt')
-    with open('missing_tweets.txt', 'w') as f:
+    with io.open('missing_tweets.txt', 'w', encoding='utf-8') as f:
         for date in failed_links:
             link = failed_links[date]
             f.write(date + " " + str(link) + "\n")

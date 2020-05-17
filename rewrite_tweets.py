@@ -1,5 +1,6 @@
 import datetime
 import os
+import io
 
 import selenium_tweets
 
@@ -11,7 +12,7 @@ tweet_by_year = {}
 
 def main():
 
-    with open('recovered_tweets.txt', 'r') as f:
+    with io.open('recovered_tweets.txt', 'r', encoding='utf-8') as f:
         for line in f:
             date, tweet = line.split('\t')
             year = date.split('-')[0]
@@ -36,11 +37,11 @@ def main():
         curr_path = PATH.format(company_ticker, company_ticker, year)
 
         print('writing to {}'.format(temp_path))
-        with open(temp_path, 'w') as writefile:
+        with io.open(temp_path, 'w', encoding='utf-8') as writefile:
 
             # NOTE: Assumes that such a file exists
             print('reading from {}'.format(PATH.format(company_ticker, company_ticker, year)))
-            with open(curr_path, 'r') as readfile:
+            with io.open(curr_path, 'r', encoding='utf-8') as readfile:
                 line = readfile.readline()
 
                 for date in dates:
@@ -56,8 +57,8 @@ def main():
                     else:
                         missing_dates.add(date)
 
-        with open(curr_path, 'w') as writefile:
-            with open(temp_path, 'r') as readfile:
+        with io.open(curr_path, 'w', encoding='utf-8') as writefile:
+            with io.open(temp_path, 'r', encoding='utf-8') as readfile:
                 for line in readfile:
                     writefile.write(line)
 

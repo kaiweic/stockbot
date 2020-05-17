@@ -10,7 +10,8 @@ import datetime
 import re
 # from rotate_proxies import get_proxies
 import random
-import os, io
+import os
+import io
 
 import configparser
 
@@ -90,13 +91,15 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
             success = True
     except Exception as e:
         print(e)
+        restart_driver()
     return list(tweets), success, link
 
 # Add refreshing driver as a function, so it can be called in tweets_makeup.py
 def restart_driver():
     global driver
     try:
-        driver.close()
+        if driver is not None:
+            driver.quit()
     except Exception as e:
         print(e)
     driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
@@ -173,7 +176,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
                     f.write(date + " " + str(link) + "\n")
     else:
         print("There were no failed dates")
-    driver.close()
+    driver.quit()
 
 
 if __name__ == '__main__':
