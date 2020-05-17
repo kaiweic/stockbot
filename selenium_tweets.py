@@ -70,7 +70,7 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
             y_max = driver.execute_script("return document.body.scrollHeight;")
             driver.execute_script("window.scrollTo(0, {});".format((y_off + y_max) // 2))
 
-            WebDriverWait(driver, 8).until(EC.presence_of_element_located((By.TAG_NAME, 'article')))
+            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, 'article')))
             time.sleep(random.uniform(1.4, 2.2))
 
             # css-901oao css-16my406 r-1qd0xha r-ad9z0x r-bcqeeo r-qvutc0
