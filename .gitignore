@@ -1,4 +1,4 @@
 settings.config
-./missing_tweets.txt
+missing_tweets.txt
 __pycache__/*
-./recovered_tweets.txt
+recovered_tweets.txt
