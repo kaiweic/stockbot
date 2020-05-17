@@ -14,7 +14,11 @@ def main():
 
     with io.open('recovered_tweets.txt', 'r', encoding='utf-8') as f:
         for line in f:
-            date, tweet = line.split('\t')
+            try:
+                date, tweet = line.split('\t', 1)
+            except Exception as e:
+                print(line, e)
+
             year = date.split('-')[0]
             if year not in tweet_by_year:
                 tweet_by_year[year] = {}

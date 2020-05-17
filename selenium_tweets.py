@@ -99,6 +99,7 @@ def restart_driver():
     global driver
     try:
         if driver is not None:
+            print('restarting chromedriver')
             driver.quit()
     except Exception as e:
         print(e)
