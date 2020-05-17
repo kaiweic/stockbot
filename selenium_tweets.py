@@ -54,7 +54,7 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
 
     try:
         # r-30o5oe r-1niwhzg r-17gur6a r-1yadl64 r-deolkf r-homxoj r-poiln3 r-7cikom r-1ny4l3l r-1sp51qo r-1swcuj1 r-1dz5y72 r-1ttztb7 r-13qz1uu
-        search_box = WebDriverWait(driver, 8).until(EC.presence_of_element_located((By.CLASS_NAME, 'r-30o5oe')))
+        search_box = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'r-30o5oe')))
         time.sleep(random.uniform(1.5, 2.4))
 
         search_box.clear()
@@ -70,7 +70,7 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
             y_max = driver.execute_script("return document.body.scrollHeight;")
             driver.execute_script("window.scrollTo(0, {});".format((y_off + y_max) // 2))
 
-            WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.TAG_NAME, 'article')))
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'article')))
             time.sleep(random.uniform(1.4, 2.2))
 
             # css-901oao css-16my406 r-1qd0xha r-ad9z0x r-bcqeeo r-qvutc0
@@ -96,6 +96,8 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
             success = True
     except TimeoutException:
         print('Timing out, try again later')
+        print('Although probably no tweets')
+        # success = True
     except NoSuchElementException:
         print("Can't find the element, try again later or maybe there aren't any tweets")
     except Exception as e:
@@ -159,7 +161,8 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
                 print('got it for {} with {} results'.format(start, len(articles)))
                 date_to_tweets[start] = articles
                 time.sleep(3.5)
-
+                if (i % 40 == 0):
+                    restart_driver()
         except Exception as e: 
             print(e)
 
