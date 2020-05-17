@@ -2,56 +2,67 @@ import datetime
 import os
 
 import selenium_tweets
-# import selenium_tweets_attu as selenium_tweets # For eric
 
 company_ticker = selenium_tweets.company_ticker
 
 PATH = selenium_tweets.DATA_PATH
 
 tweet_by_year = {}
-with open('recovered_tweets.txt', 'r') as f:
-    for line in f:
-        date, tweet = line.split('\t')
-        year = date.split('-')[0]
-        if year not in tweet_by_year:
-            tweet_by_year[year] = {}
-        if date not in tweet_by_year[year]:
-            tweet_by_year[year][date] = []
-        tweet_by_year[year][date].append(line)
-# print(tweet_by_year['2015'])
-missing_dates = set()
-temp_path = PATH.format(company_ticker, company_ticker, "temp")
-for year in tweet_by_year:
-    
-    start_date = datetime.datetime.strptime("{}-01-01".format(year), '%Y-%m-%d')
-    end_date = datetime.datetime.strptime("{}-01-01".format(int(year) + 1), '%Y-%m-%d')
-    days_in_year = (end_date - start_date).days
-    dates = [(start_date + datetime.timedelta(days=i)).strftime("%Y-%m-%d") for i in range(days_in_year)] # accounts for leap years
-    
-    missed_tweets = tweet_by_year[year]
-    
-    curr_path = PATH.format(company_ticker, company_ticker, year)
 
-    print('writing to {}'.format(temp_path))
-    with open(temp_path, 'w') as writefile:
-        print('reading from {}'.format(PATH.format(company_ticker, company_ticker, year)))
-        with open(curr_path, 'r') as readfile:
-            line = readfile.readline()
-            for date in dates:
-                if line.startswith(date):
-                    while(line.startswith(date)):
-                        writefile.write(line)
-                        line = readfile.readline()
-                elif date in missed_tweets:
-                    for missed_tweet in missed_tweets[date]:
-                        writefile.write(missed_tweet)
-                else:
-                    missing_dates.add(date)
+def main():
 
-    with open(curr_path, 'w') as writefile:
-        with open(temp_path, 'r') as readfile:
-            for line in readfile:
-                writefile.write(line)
+    with open('recovered_tweets.txt', 'r') as f:
+        for line in f:
+            date, tweet = line.split('\t')
+            year = date.split('-')[0]
+            if year not in tweet_by_year:
+                tweet_by_year[year] = {}
+            if date not in tweet_by_year[year]:
+                tweet_by_year[year][date] = []
+            tweet_by_year[year][date].append(line)
 
-print('cleaning up {}'.format(temp_path))
-os.remove(temp_path)
+    missing_dates = set()
+    temp_path = PATH.format(company_ticker, company_ticker, "temp")
+
+    for year in tweet_by_year:
+        
+        start_date = datetime.datetime.strptime("{}-01-01".format(year), '%Y-%m-%d')
+        end_date = datetime.datetime.strptime("{}-01-01".format(int(year) + 1), '%Y-%m-%d')
+        days_in_year = (end_date - start_date).days
+        dates = [(start_date + datetime.timedelta(days=i)).strftime("%Y-%m-%d") for i in range(days_in_year)] # accounts for leap years
+        
+        missed_tweets = tweet_by_year[year]
+        
+        curr_path = PATH.format(company_ticker, company_ticker, year)
+
+        print('writing to {}'.format(temp_path))
+        with open(temp_path, 'w') as writefile:
+
+            # NOTE: Assumes that such a file exists
+            print('reading from {}'.format(PATH.format(company_ticker, company_ticker, year)))
+            with open(curr_path, 'r') as readfile:
+                line = readfile.readline()
+
+                for date in dates:
+                    if line.startswith(date):
+                        while (line.startswith(date)):
+                            writefile.write(line)
+                            line = readfile.readline()
+
+                    elif date in missed_tweets:
+                        for missed_tweet in missed_tweets[date]:
+                            writefile.write(missed_tweet)
+
+                    else:
+                        missing_dates.add(date)
+
+        with open(curr_path, 'w') as writefile:
+            with open(temp_path, 'r') as readfile:
+                for line in readfile:
+                    writefile.write(line)
+
+    print('cleaning up {}'.format(temp_path))
+    os.remove(temp_path)
+
+if __name__ == '__main__':
+    main()

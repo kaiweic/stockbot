@@ -1,8 +1,14 @@
 from os import listdir
 from os.path import isfile, join
+import configparser
 
-company_ticker = 'AAPL' # TODO: Change this to correct ticker
-PATH = '/d/stockbot_data/{}/'.format(company_ticker) # TODO: Change this to correct data path
+config = configparser.ConfigParser()
+config.read('settings.config')
+config = config['DEFAULT']
+
+company_ticker = config['company_ticker']
+
+PATH = config['DATA_DIR'].format(company_ticker)
  
 files = [PATH + f for f in listdir(PATH) if isfile(join(PATH, f))]
 print(files)

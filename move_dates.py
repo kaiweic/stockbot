@@ -1,7 +1,13 @@
 import os 
 import datetime
+import configparser
 
-company_ticker = 'AAPL'
+config = configparser.ConfigParser()
+config.read('settings.config')
+config = config['DEFAULT']
+
+company_ticker = config['company_ticker']
+
 PATH = './twitter_data/{}.tsv'.format(company_ticker)
 TEMP_PATH = './twitter_data/temp.tsv'
 with open(PATH, 'r') as f:
