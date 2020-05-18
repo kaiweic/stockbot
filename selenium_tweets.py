@@ -102,7 +102,6 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
         print("Can't find the element, try again later or maybe there aren't any tweets")
     except Exception as e:
         print(e)
-        restart_driver()
     return list(tweets), success, link
 
 # Add refreshing driver as a function, so it can be called in tweets_makeup.py
@@ -155,6 +154,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
 
                 if not success:
                     failed_links[start] = link
+                    restart_driver()
                     print('failed')
                     print(link)
 
