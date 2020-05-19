@@ -2,11 +2,11 @@ Andrew
 - AAPL: ✅
 - CMG: ✅
 - GOOGL: ✅
-- LUV: ❌
-- UAL: ❌
+- LUV: ✅
+- UAL: ✅
 
 Eric
-- MSFT: ❌
+- MSFT: ✅
 - DAL: ❌
 - JPM: ❌
 - MCD: ❌
