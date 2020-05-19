@@ -13,8 +13,8 @@ Eric
 - V: ❌
 
 Kevin
-- BAC: ❌
-- FB: ❌
+- BAC: ✅
+- FB: ✅
 - KO: ❌
 - PEP: ❌
 - WFC: ❌
