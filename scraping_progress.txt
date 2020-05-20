@@ -10,7 +10,7 @@ Eric
 - DAL: ❌
 - JPM: ❌
 - MCD: ❌
-- V: ❌
+- V: ✅
 
 Kevin
 - BAC: ✅
