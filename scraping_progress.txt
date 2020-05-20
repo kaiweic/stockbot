@@ -10,12 +10,12 @@ Eric
 - DAL: ❌
 - JPM: ❌
 - MCD: ❌
-- V: ❌
+- V: ✅
 
 Kevin
 - BAC: ✅
 - FB: ✅
-- KO: ❌
+- KO: ✅
 - PEP: ❌
 - WFC: ❌
 
