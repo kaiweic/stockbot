@@ -2,20 +2,20 @@ Andrew
 - AAPL: ✅
 - CMG: ✅
 - GOOGL: ✅
-- LUV: ❌
-- UAL: ❌
+- LUV: ✅
+- UAL: ✅
 
 Eric
 - MSFT: ✅
 - DAL: ❌
 - JPM: ❌
 - MCD: ❌
-- V: ❌
+- V: ✅
 
 Kevin
-- BAC: ❌
-- FB: ❌
-- KO: ❌
+- BAC: ✅
+- FB: ✅
+- KO: ✅
 - PEP: ❌
 - WFC: ❌
 

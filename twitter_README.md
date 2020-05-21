@@ -1,17 +1,21 @@
 # Instructions for running tweet scraper by hash tag
 
-1.  You run `selenium_tweets.py`, which currently gets tweets from 2010 to 2013 for Dec 31st for "#Amazon" 
-    because you should test it before you actually run it. You can change it from 2010-2019 from Jan 1st to 
-    Dec 31st when you actually go to run it. I marked the places to change with `TODO`.
-   -  `selenium_tweets_attu.py` now just imports `selenium_tweets` so I don't have to change everything twice to 
-      make it work for Eric on attu. The output will write to `DATA_DIR/{company_ticker}/" and it'll create a 
-      directory if there wasn't one already. 
-2.  It'll write failed dates and links to `missing_tweets.txt`. From there, you can run `makeup_tweets.py` or 
-    `makeup_tweets_attu.py` to get the missing tweets, which will write the recovered tweets to 
-    `recovered_tweets.txt` and any failed dates back into `missing_tweets.txt`. 
-3.  Then you can run `rewrite_tweets.py` to write the recovered tweets to the files they were missing from and 
-    you'd rerun `makeup_tweets.py` and `rewrite_tweets.py` until there are no more missing dates.
+0.  Initialize things in `settings.config`. It should look something like this 
+```
+[DEFAULT]
+chromedriver = [CHROMEDRIVER PATH]
+DATA_DIR = [WRITE PATH]
+company_ticker = [COMPANY TICKER]
+alt = [html5lib (false) vs. html.parser (true), html5lib by default]
+```
+TODO: Add start and end dates as config options, currently does Jan 1st 2010 to Jan 1st 2020 (exclusive)
+1.  You run `selenium_tweets.py` after that
+2.  It'll write failed dates and links to `missing_tweets.txt`. From there, you can run `makeup_tweets.py`
+    and recovered tweets will be put in `recovered_tweets.txt` any failed dates back into `missing_tweets.txt`. 
+    The end of `makeup_tweets.py` runs `rewrite_tweets.py` to write the recovered tweets to the files they 
+    were missing from.
+3.  Rerun `makeup_tweets.py` until there are no more missing dates or confirm that there were no tweets on that day. 
 4.  When you have all the data, you can fill out and run `combine_data.py` to combine all the data, which will 
     write it to `./twitter_data/\[company_ticker\].tsv`, then from there, you can edit and run 
-    `check_consecutive_tweets.py` to check whether there were any missing dates and you can manually check to 
-    see if those dates actually had tweets with the links provided
+    `check_consecutive_tweets.py` to check whether there were any missing dates and confirm if the missing dates
+    if those dates actually had no tweets with the links provided
