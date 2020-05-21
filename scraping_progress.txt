@@ -6,7 +6,7 @@ Andrew
 - UAL: ❌
 
 Eric
-- MSFT: ❌
+- MSFT: ✅
 - DAL: ❌
 - JPM: ❌
 - MCD: ❌
