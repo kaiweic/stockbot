@@ -25,29 +25,33 @@ company_ticker = config['company_ticker']
 DATA_DIR = config['DATA_DIR']
 DATA_PATH = DATA_DIR + '{}_{}.tsv' # Should look like /d/stockbot_data/{}/{}_{}.tsv
 alt = config.getboolean('alt')     # Should be true for eric since he's on linux
+cash = config.getboolean('cash')
+start_year = int(config['start_year'])
+end_year = int(config['end_year'])
 
-company_tags = {"AAPL": "AAPL",
-                "MSFT": "MSFT",
-                "BAC": "BankOfAmerica",
-                "CMG": "Chipotle",
-                "DAL": "Delta",
-                "FB": "facebook",
-                "GOOGL": "google",
-                "JPM": "jpmorgan",
-                "KO": "CocaCola",
-                "LUV": "SouthwestAirlines",
-                "MCD": "mcdonald",
-                "PEP": "pepsi",
-                "UAL": "ual",
-                "V": "visa",
-                "WFC": "wellsfargo",}
+company_tags = {}
+# company_tags = {"AAPL": "AAPL",
+#                 "MSFT": "MSFT",
+#                 "BAC": "BankOfAmerica",
+#                 "CMG": "Chipotle",
+#                 "DAL": "Delta",
+#                 "FB": "facebook",
+#                 "GOOGL": "google",
+#                 "JPM": "jpmorgan",
+#                 "KO": "CocaCola",
+#                 "LUV": "SouthwestAirlines",
+#                 "MCD": "mcdonald",
+#                 "PEP": "pepsi",
+#                 "UAL": "ual",
+#                 "V": "visa",
+#                 "WFC": "wellsfargo",}
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--incognito')
 chrome_options.add_argument('headless')
 driver = None
 
-def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
+def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False, cash=True):
     tweets = set()
     success = False
     link = None
@@ -61,7 +65,10 @@ def get_tweets(start_date, end_date, company_tag=company_ticker, alt=False):
         time.sleep(0.4)
         
         # (#AMZN) until:2020-04-29 since:2020-04-28
-        search_box.send_keys('(#{}) until:{} since:{}'.format(company_tag, end_date, start_date))
+        if cash:
+            search_box.send_keys('(${}) until:{} since:{}'.format(company_tag, end_date, start_date))
+        else:
+            search_box.send_keys('(#{}) until:{} since:{}'.format(company_tag, end_date, start_date))
         search_box.submit()
         link = driver.current_url
 
@@ -117,7 +124,7 @@ def restart_driver():
     driver.get('https://www.twitter.com/')
     time.sleep(2)
 
-def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt=False):
+def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt=False, cash=True):
     global driver
     assert(start_year <= end_year)
 
@@ -125,14 +132,17 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
     start_date = '01-01' # TODO CHANGE TO 01-01
     end_date = '01-01'   
     failed_year = {}
-
     path = DATA_DIR.format(company_ticker)
+
     print("Creating {} if not already created".format(path))
     if not os.path.exists(path):
         os.makedirs(path)
 
     company_tag = company_tags[company_ticker] if company_ticker in company_tags else company_ticker
-    print("Searching up #{} for {} from {} to {} (inclusive)".format(company_tag, company_ticker, start_year, end_year))
+    if (cash):
+        print("Searching up ${} for {} from {} to {} (inclusive)".format(company_tag, company_ticker, start_year, end_year))
+    else:
+        print("Searching up #{} for {} from {} to {} (inclusive)".format(company_tag, company_ticker, start_year, end_year))
 
     for year in range(start_year, end_year + 1):
         print('for year {}, from {} to {}'.format(year, str(year) + '-' + start_date, str(year + 1) + '-' + end_date))
@@ -150,7 +160,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
             for i in range(1, len(dates)):
                 start = dates[i - 1].strftime("%Y-%m-%d")
                 end = dates[i].strftime("%Y-%m-%d")
-                articles, success, link = get_tweets(start, end, company_tag=company_tag, alt=True)
+                articles, success, link = get_tweets(start, end, company_tag=company_tag, alt=True, cash=cash)
 
                 if not success:
                     failed_links[start] = link
@@ -191,5 +201,5 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
 
 
 if __name__ == '__main__':
-    get_years(start_year=2010, end_year=2019, alt=alt) # TODO Change to 2010 to 2019
+    get_years(start_year=start_year, end_year=end_year, alt=alt, cash=cash) # TODO Change to 2010 to 2019
     # driver.close()

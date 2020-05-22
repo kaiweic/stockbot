@@ -9,8 +9,11 @@ PATH = selenium_tweets.DATA_PATH
 
 company_tag = selenium_tweets.company_tags[company_ticker] if company_ticker in selenium_tweets.company_tags else company_ticker
 
-start_year = 2010
-end_year = 2019
+start_year = selenium_tweets.start_year
+end_year = selenium_tweets.end_year
+
+cash = selenium_tweets.cash
+
 all_days = set()
 for year in range(start_year, end_year + 1):
     start_date = datetime.datetime.strptime("{}-01-01".format(year), '%Y-%m-%d')
@@ -44,4 +47,7 @@ print()
 print('list for missing_tweets.txt')
 for date in missing_dates:
     tomorrow = (datetime.datetime.strptime(date, '%Y-%m-%d') + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
-    print('{} https://twitter.com/search?q=(%23{})%20until%3A{}%20since%3A{}&src=typed_query'.format(date, company_tag, tomorrow, date))
+    if cash:
+        print('{} https://twitter.com/search?q=(%24{})%20until%3A{}%20since%3A{}&src=typed_query'.format(date, company_tag, tomorrow, date))
+    else:
+        print('{} https://twitter.com/search?q=(%23{})%20until%3A{}%20since%3A{}&src=typed_query'.format(date, company_tag, tomorrow, date))

@@ -1,3 +1,6 @@
+✅ = Done
+❌ = Not Done
+
 Andrew 
 - AAPL: ✅
 - CMG: ✅
@@ -16,6 +19,6 @@ Kevin
 - BAC: ✅
 - FB: ✅
 - KO: ✅
-- PEP: ❌
-- WFC: ❌
+- PEP: ✅
+- WFC: ✅
 
