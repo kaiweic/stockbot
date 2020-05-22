@@ -129,7 +129,7 @@ def get_years(start_year=2010, end_year=2019, company_ticker=company_ticker, alt
     assert(start_year <= end_year)
 
     restart_driver()
-    start_date = '12-30' # TODO CHANGE TO 01-01
+    start_date = '01-01' # TODO CHANGE TO 01-01
     end_date = '01-01'   
     failed_year = {}
     path = DATA_DIR.format(company_ticker)
