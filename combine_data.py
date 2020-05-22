@@ -14,7 +14,9 @@ PATH = config['DATA_DIR'].format(company_ticker)
 files = [PATH + f for f in listdir(PATH) if isfile(join(PATH, f))]
 print(files)
 
-with io.open('./twitter_data/{}.tsv'.format(company_ticker), 'w', encoding='utf-8') as outfile:
+COMBINE_PATH = config['COMBINE_PATH']
+
+with io.open(COMBINE_PATH.format(company_ticker), 'w', encoding='utf-8') as outfile:
     for f in files:
         with io.open(f, 'r', encoding='utf-8') as infile:
             for line in infile:

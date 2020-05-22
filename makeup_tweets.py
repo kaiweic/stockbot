@@ -12,8 +12,9 @@ company_ticker = selenium_tweets.company_ticker
 company_tag = selenium_tweets.company_tags[company_ticker] if company_ticker in selenium_tweets.company_tags else company_ticker
 
 alt = selenium_tweets.alt
+cash = selenium_tweets.cash
 
-def main(alt=False):
+def main(alt=False, cash=True):
     count = 0
 
     selenium_tweets.restart_driver()
@@ -29,7 +30,7 @@ def main(alt=False):
             end_date = start_date + datetime.timedelta(days=1)
             start = start_date.strftime("%Y-%m-%d")
             end = end_date.strftime("%Y-%m-%d")
-            articles, success, link = selenium_tweets.get_tweets(start, end, company_tag, alt)
+            articles, success, link = selenium_tweets.get_tweets(start, end, company_tag, alt, cash)
 
             if not success:
                 failed_links[start] = link
@@ -71,7 +72,7 @@ def main(alt=False):
     return True
 
 if __name__ == '__main__':
-    success = main(alt=alt)
+    success = main(alt=alt, cash=cash)
     if success:
         print('rewriting tweets')
         rewrite_tweets.main()
