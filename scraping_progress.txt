@@ -19,6 +19,6 @@ Kevin
 - BAC: ✅
 - FB: ✅
 - KO: ✅
-- PEP: ❌
+- PEP: ✅
 - WFC: ✅
 
