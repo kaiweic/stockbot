@@ -1,3 +1,6 @@
+✅ = Done
+❌ = Not Done
+
 Andrew 
 - AAPL: ✅
 - CMG: ✅
@@ -7,9 +10,9 @@ Andrew
 
 Eric
 - MSFT: ✅
-- DAL: ❌
+- DAL: ✅
 - JPM: ❌
-- MCD: ❌
+- MCD: ✅
 - V: ✅
 
 Kevin
@@ -17,5 +20,5 @@ Kevin
 - FB: ✅
 - KO: ✅
 - PEP: ❌
-- WFC: ❌
+- WFC: ✅
 
