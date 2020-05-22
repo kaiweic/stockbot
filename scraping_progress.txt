@@ -20,5 +20,5 @@ Kevin
 - FB: ✅
 - KO: ✅
 - PEP: ❌
-- WFC: ❌
+- WFC: ✅
 
