@@ -1,24 +1,26 @@
 ✅ = Done
 ❌ = Not Done
 
+Format: (Stock ticker: hashtag tweets, cashtag tweets)
+
 Andrew 
-- AAPL: ✅
-- CMG: ✅
-- GOOGL: ✅
-- LUV: ✅
-- UAL: ✅
+-  AAPL: ✅, ❌
+-   CMG: ✅, ❌
+- GOOGL: ✅, ❌ (GOOG)
+-   LUV: ✅, ❌
+-   UAL: ✅, ❌
 
 Eric
-- MSFT: ✅
-- DAL: ✅
-- JPM: ❌
-- MCD: ✅
-- V: ✅
+- MSFT: ✅, ❌
+-  DAL: ✅, ❌
+-  JPM: ✅, ❌
+-  MCD: ✅, ❌
+-    V: ✅, ❌
 
 Kevin
-- BAC: ✅
-- FB: ❌
-- KO: ❌
-- PEP: ❌
-- WFC: ❌
+- BAC: ✅, ✅
+-  FB: ✅, ❌
+-  KO: ✅, ❌
+- PEP: ✅, ❌
+- WFC: ✅, ❌
 
