@@ -18,7 +18,7 @@ Eric
 -    V: ✅, ❌
 
 Kevin
-- BAC: ✅, ❌
+- BAC: ✅, ✅
 -  FB: ✅, ❌
 -  KO: ✅, ❌
 - PEP: ✅, ❌
