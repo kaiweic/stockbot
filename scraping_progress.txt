@@ -4,10 +4,10 @@
 Format: (Stock ticker: hashtag tweets, cashtag tweets)
 
 Andrew 
--  AAPL: ✅, ❌
--   CMG: ✅, ❌
-- GOOGL: ✅, ❌ (GOOG)
--   LUV: ✅, ❌
+-  AAPL: ✅, ✅
+-   CMG: ✅, ✅
+- GOOGL: ✅, ✅ (GOOG)
+-   LUV: ✅, ✅
 -   UAL: ✅, ❌
 
 Eric
