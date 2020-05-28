@@ -20,7 +20,7 @@ Eric
 Kevin
 - BAC: ✅, ✅
 -  FB: ✅, ✅
--  KO: ✅, ❌
+-  KO: ✅, ✅
 - PEP: ✅, ❌
 - WFC: ✅, ❌
 
