@@ -14,8 +14,8 @@ Eric
 - MSFT: ✅, ❌
 -  DAL: ✅, ❌
 -  JPM: ✅, ❌
--  MCD: ✅, ❌
--    V: ✅, ❌
+-  MCD: ✅, ✅
+-    V: ✅, ✅
 
 Kevin
 - BAC: ✅, ✅
