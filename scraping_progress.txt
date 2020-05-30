@@ -8,12 +8,12 @@ Andrew
 -   CMG: ✅, ✅
 - GOOGL: ✅, ✅ (GOOG)
 -   LUV: ✅, ✅
--   UAL: ✅, ❌
+-   UAL: ✅, ✅
 
 Eric
-- MSFT: ✅, ❌
+- MSFT: ✅, ✅
 -  DAL: ✅, ❌
--  JPM: ✅, ❌
+-  JPM: ✅, ✅
 -  MCD: ✅, ✅
 -    V: ✅, ✅
 
