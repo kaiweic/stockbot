@@ -21,6 +21,6 @@ Kevin
 - BAC: ✅, ✅
 -  FB: ✅, ✅
 -  KO: ✅, ✅
-- PEP: ✅, ❌
-- WFC: ✅, ❌
+- PEP: ✅, ✅
+- WFC: ✅, ✅
 
