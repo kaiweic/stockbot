@@ -12,7 +12,7 @@ Andrew
 
 Eric
 - MSFT: ✅, ✅
--  DAL: ✅, ❌
+-  DAL: ✅, ✅
 -  JPM: ✅, ✅
 -  MCD: ✅, ✅
 -    V: ✅, ✅
