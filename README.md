@@ -6,4 +6,5 @@
 - Financial model in financial_model folder
 - Everything for sentiment analysis in sentiment_analysis folder
 - Tweet scraper in tweet_scraper folder
-- Twitter data in twitter_data folder
+- Twitter general hashtag data in twitter_data folder
+- Twitter cashtag data in twitter_cashtag_data folder
