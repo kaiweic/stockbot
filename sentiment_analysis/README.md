@@ -1,0 +1,3 @@
+- Training: run code/SentimentBiGRUTraining.py, which trains on data/train2.csv
+- Testing: run code/SentimentBiGRUTesting.py, which reads input from input/input.txt (each line is a sentence) and outputs to output/output.txt (each line with a number from 0 to 1, 0 is negative, 1 is positive)
+- model/BestSentimentBiGRU.pt and model/voc2ind.json are saved information for model

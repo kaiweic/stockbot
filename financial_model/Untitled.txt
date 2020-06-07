@@ -1,0 +1,75 @@
+Processing DAL
+Train Score: 0.76 RMSE
+Test Score: 0.96 RMSE
+SMA RMSE: 1.3356582399446848
+Test Score: 0.87 RMSE
+Processing MCD
+Train Score: 1.28 RMSE
+Test Score: 7.45 RMSE
+SMA RMSE: 2.221048864760145
+Test Score: 2.37 RMSE
+Processing FB
+Train Score: 2.34 RMSE
+Test Score: 3.49 RMSE
+SMA RMSE: 4.195176992021839
+Test Score: 3.45 RMSE
+Processing AAPL
+Train Score: 1.86 RMSE
+Test Score: 11.36 RMSE
+SMA RMSE: 3.8041710976635184
+Test Score: 4.60 RMSE
+Processing WFC
+Train Score: 0.62 RMSE
+Test Score: 0.70 RMSE
+SMA RMSE: 1.141461328701134
+Test Score: 0.69 RMSE
+Processing UAL
+Train Score: 1.17 RMSE
+Test Score: 1.99 RMSE
+SMA RMSE: 2.2389349724247625
+Test Score: 1.41 RMSE
+Processing V
+Train Score: 1.03 RMSE
+Test Score: 13.80 RMSE
+SMA RMSE: 1.7817725786295264
+Test Score: 2.73 RMSE
+Processing MSFT
+Train Score: 0.87 RMSE
+Test Score: 16.46 RMSE
+SMA RMSE: 1.517797881100597
+Test Score: 2.28 RMSE
+Processing BAC
+Train Score: 0.29 RMSE
+Test Score: 0.52 RMSE
+SMA RMSE: 0.6303304187934216
+Test Score: 0.47 RMSE
+Processing PEP
+Train Score: 0.86 RMSE
+Test Score: 2.31 RMSE
+SMA RMSE: 1.5433130147436354
+Test Score: 1.36 RMSE
+Processing KO
+Train Score: 0.36 RMSE
+Test Score: 0.96 RMSE
+SMA RMSE: 0.6859159304785333
+Test Score: 0.52 RMSE
+Processing CMG
+Train Score: 9.04 RMSE
+Test Score: 13.43 RMSE
+SMA RMSE: 17.69732696413808
+Test Score: 11.76 RMSE
+Processing LUV
+Train Score: 0.69 RMSE
+Test Score: 1.02 RMSE
+SMA RMSE: 1.2876592295390736
+Test Score: 0.91 RMSE
+Processing GOOGL
+Train Score: 12.46 RMSE
+Test Score: 18.64 RMSE
+SMA RMSE: 24.41384572523163
+Test Score: 18.29 RMSE
+Processing JPM
+Train Score: 1.00 RMSE
+Test Score: 2.07 RMSE
+SMA RMSE: 1.8777346449408618
+Test Score: 1.68 RMSE
